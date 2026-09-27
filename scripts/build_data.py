@@ -18,6 +18,7 @@ import pandas as pd
 
 RAIZ = Path(__file__).resolve().parent.parent
 CSV = Path(sys.argv[1]) if len(sys.argv) > 1 else RAIZ / "data" / "maraton_42k_2024_2026_limpio.csv"
+CLIMA = RAIZ / "data" / "clima_carrera.csv"  # una fila por año, generada desde Open-Meteo
 SALIDA = RAIZ / "public" / "data" / "resultados.json"
 
 YEARS = [2024, 2025, 2026]
@@ -58,6 +59,11 @@ def main():
         "n": df["n"].tolist(),
         "o": df["o"].tolist(),
     }
+    if CLIMA.exists():
+        clima = pd.read_csv(CLIMA, encoding="utf-8-sig")
+        clima = clima[clima["anio"].isin(YEARS)].set_index("anio")
+        datos["clima"] = {str(a): fila.round(1).to_dict() for a, fila in clima.iterrows()}
+
     SALIDA.parent.mkdir(parents=True, exist_ok=True)
     SALIDA.write_text(json.dumps(datos, separators=(",", ":")))
     print(f"{len(df)} corredores -> {SALIDA.relative_to(RAIZ)}")

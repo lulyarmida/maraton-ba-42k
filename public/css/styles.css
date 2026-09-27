@@ -74,3 +74,9 @@ td .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-rig
 #mineOut p{margin:10px 0 0}
 #mineOut .big{font-family:var(--display);font-weight:700;font-size:1.35rem}
 footer{margin-top:40px;font-size:.82rem;color:var(--muted);max-width:75ch}
+
+.clima{margin-top:36px}
+.sens{display:inline-block;font-size:.8rem;font-weight:600;padding:2px 9px;border-radius:999px;border:1px solid currentColor}
+.sens-0{color:#2E8B57}.sens-1{color:#B7791F}.sens-2{color:var(--y2026)}.sens-3{color:#B8321A}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .sens-1{color:#E0A84A}}
+:root[data-theme="dark"] .sens-1{color:#E0A84A}

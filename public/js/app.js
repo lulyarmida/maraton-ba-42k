@@ -143,6 +143,20 @@ function parseTime(s){
   const t = h*60+m+sec/60; return (t>=60 && t<=600) ? t : null;
 }
 
+const dec = new Intl.NumberFormat("es-AR",{minimumFractionDigits:1, maximumFractionDigits:1});
+function sensacion(r){ return r<10?[0,"Cómodo"]: r<15?[1,"Se nota"]: r<18?[2,"Pesado"]:[3,"Muy pesado"]; }
+function climaTable(){
+  const C = RAW.clima; const el = document.getElementById("clima");
+  if (!C){ el.closest("section").style.display="none"; return; }
+  let h = `<thead><tr><th>Año</th><th>Temp. a las 7 h</th><th>Temp. máxima</th><th>Humedad a las 7 h</th><th>Humedad media</th><th>Punto de rocío</th><th>Viento medio</th><th>Sensación</th></tr></thead><tbody>`;
+  YEARS.forEach(y=>{ const c=C[y]; if(!c) return; const [k,t]=sensacion(c.punto_rocio_medio);
+    h += `<tr><td><span class="dot" style="background:${color(y)}"></span>${y}</td><td>${dec.format(c.temp_largada)} °C</td><td>${dec.format(c.temp_max)} °C</td><td>${Math.round(c.humedad_largada)} %</td><td>${Math.round(c.humedad_media)} %</td><td>${dec.format(c.punto_rocio_medio)} °C</td><td>${Math.round(c.viento_medio_kmh)} km/h</td><td><span class="sens sens-${k}">${t}</span></td></tr>`;
+    const chip=[...document.querySelectorAll(".yr")].find(b=>b.textContent==String(y));
+    if (chip) chip.title = `Largada: ${dec.format(c.temp_largada)} °C y ${Math.round(c.humedad_largada)} % de humedad. Máxima: ${dec.format(c.temp_max)} °C`;
+  });
+  el.innerHTML = h + "</tbody>";
+}
+
 function refresh(){
   DATA = subset();
   document.getElementById("hint").textContent = state.view==="dens"
@@ -169,5 +183,5 @@ document.getElementById("mine").addEventListener("input", e=>{ state.mine = pars
 let rt; window.addEventListener("resize", ()=>{clearTimeout(rt); rt=setTimeout(draw,120);});
 fetch("data/resultados.json")
   .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-  .then(d => { RAW = d; refresh(); })
+  .then(d => { RAW = d; climaTable(); refresh(); })
   .catch(() => { document.getElementById("hint").textContent = "No se pudieron cargar los datos. Recargá la página."; });
