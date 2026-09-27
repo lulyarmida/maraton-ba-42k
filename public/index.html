@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Comparación interactiva de los tiempos de llegada del Maratón de Buenos Aires 42K, ediciones 2024, 2025 y 2026.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏃</text></svg>">
+<title>Maratón de Buenos Aires 42K: tiempos 2024 a 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="js/vendor/d3.v7.min.js"></script>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<main>
+<header>
+  <p class="kicker">Maratón de Buenos Aires 42K, ediciones 2024, 2025 y 2026</p>
+  <h1>¿Cómo llegaron los corredores?</h1>
+  <p class="lead">Compará la distribución de tiempos de llegada entre los tres años. Filtrá por sexo y edad, pasá el cursor sobre el gráfico para ver qué porcentaje había llegado a cada hora, o cargá tu tiempo para ver dónde quedarías.</p>
+</header>
+
+<div class="controls">
+  <div class="ctl"><span>Sexo</span>
+    <div class="seg" id="sex">
+      <button data-v="all" aria-pressed="true">Todos</button>
+      <button data-v="1" aria-pressed="false">Mujeres</button>
+      <button data-v="0" aria-pressed="false">Varones</button>
+    </div>
+  </div>
+  <div class="ctl"><label for="age"><span style="font-size:.85rem;color:var(--muted);font-weight:500">Edad</span></label>
+    <select id="age"><option value="all">Todas las edades</option></select>
+  </div>
+  <div class="ctl"><span>Tiempo</span>
+    <div class="seg" id="tipo">
+      <button data-v="n" aria-pressed="true" title="Desde que cruzaste la largada hasta la meta">Neto</button>
+      <button data-v="o" aria-pressed="false" title="Desde el disparo de largada">Oficial</button>
+    </div>
+  </div>
+</div>
+
+<section class="chartbox" aria-label="Gráfico de tiempos de llegada">
+  <div class="chart-head">
+    <div class="years" id="years"></div>
+    <div class="seg" id="view">
+      <button data-v="dens" aria-pressed="true">Distribución</button>
+      <button data-v="cum" aria-pressed="false">% que ya llegó</button>
+    </div>
+  </div>
+  <p class="hint" id="hint"></p>
+  <svg id="chart" role="img"></svg>
+  <div id="tip"></div>
+</section>
+
+<div class="below">
+  <section>
+    <h2>Resumen por año</h2>
+    <div class="tablewrap"><table id="summary"></table></div>
+    <p class="note" id="sumNote"></p>
+  </section>
+  <section>
+    <h2>¿Dónde quedarías vos?</h2>
+    <div class="mine-row">
+      <label for="mine" style="font-size:.9rem;color:var(--muted)">Tu tiempo (h:mm o h:mm:ss)</label>
+      <input type="text" id="mine" placeholder="3:45" inputmode="numeric" size="9" autocomplete="off">
+    </div>
+    <div id="mineOut"><p class="note">Escribí un tiempo y lo marcamos en el gráfico.</p></div>
+  </section>
+</div>
+
+<footer>Datos: resultados oficiales publicados en my.raceresult.com. Se usaron las listas de resultado general de cada año; en 2024 se excluyeron las listas separadas SUD y de atletas con discapacidad, y se descartó un registro de 2025 con tiempo inválido. La curva de distribución está suavizada y normalizada, así que los años se comparan aunque tengan distinta cantidad de corredores.</footer>
+</main>
+
+<script src="js/app.js"></script>
+</body>
+</html>
